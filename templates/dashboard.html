@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMS | Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f5f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #1e3a8a;
+            color: white;
+            padding: 20px 40px;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .welcome {
+            color: #1e3a8a;
+        }
+
+        .role {
+            display: inline-block;
+            background-color: #dbeafe;
+            color: #1e40af;
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+
+        .logout-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #dc2626;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>SAMS</h1>
+        <p>Student Attendance Management System</p>
+    </header>
+
+    <main class="container">
+        <h2 class="welcome">{{ dashboard_title }}</h2>
+
+        <p>Welcome, {{ username }}!</p>
+
+        <p>
+            Your role:
+            <span class="role">{{ user_role }}</span>
+        </p>
+
+        <p>You have successfully logged in to SAMS.</p>
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="logout-button">Log Out</button>
+        </form>
+    </main>
+</body>
+</html>

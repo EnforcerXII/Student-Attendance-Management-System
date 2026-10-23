@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mark Attendance | SAMS</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 30px;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #243b55;
+            margin-bottom: 20px;
+        }
+
+        .session-info {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+        }
+
+        .session-info p {
+            margin: 10px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            padding: 14px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #243b55;
+            color: white;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+
+        select {
+            width: 150px;
+            padding: 9px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: white;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 22px;
+            background-color: #243b55;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:hover {
+            background-color: #365777;
+        }
+
+        .message {
+            padding: 12px;
+            margin-bottom: 15px;
+            background-color: #e2f5e9;
+            color: #246b40;
+            border-radius: 5px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 25px;
+            color: #243b55;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .empty-message {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            th,
+            td {
+                padding: 8px;
+            }
+
+            select {
+                width: 115px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Mark Student Attendance</h1>
+
+    <div class="session-info">
+        <p>
+            <strong>Subject:</strong>
+            {{ session.subject.subject_code }} -
+            {{ session.subject.subject_name }}
+        </p>
+
+        <p>
+            <strong>Attendance Date:</strong>
+            {{ session.session_date }}
+        </p>
+
+        <p>
+            <strong>Faculty:</strong>
+            {{ request.user.get_full_name|default:request.user.username }}
+        </p>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if student_rows %}
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Student Name</th>
+                        <th>Attendance Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for row in student_rows %}
+                        <tr>
+
+                            <td>
+                                {{ row.student.student_id }}
+                            </td>
+
+                            <td>
+                                {{ row.student.user.get_full_name|default:row.student.user.username }}
+                            </td>
+
+                            <td>
+                                <select
+                                    name="status_{{ row.student.id }}"
+                                    required
+                                >
+                                    {% for status_value, status_label in statuses %}
+
+                                        <option
+                                            value="{{ status_value }}"
+                                            {% if row.current_status == status_value %}
+                                                selected
+                                            {% endif %}
+                                        >
+                                            {{ status_label }}
+                                        </option>
+
+                                    {% endfor %}
+                                </select>
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <button type="submit">
+                Save Attendance
+            </button>
+
+        </form>
+
+    {% else %}
+
+        <div class="empty-message">
+            <p>No students are enrolled in this subject.</p>
+        </div>
+
+    {% endif %}
+
+    <a class="back-link" href="{% url 'faculty_dashboard' %}">
+        &larr; Back to Faculty Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>

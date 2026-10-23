@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMS | Faculty Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f5f9;
+            margin: 0;
+        }
+
+        header {
+            background-color: #1e3a8a;
+            color: white;
+            padding: 20px 40px;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #1e3a8a;
+        }
+
+        .subject {
+            padding: 15px;
+            margin: 12px 0;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+        }
+
+        .logout-button {
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #dc2626;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>SAMS</h1>
+        <p>Student Attendance Management System</p>
+    </header>
+
+    <main class="container">
+        <h2>Faculty Dashboard</h2>
+
+        <p>Welcome, {{ username }}!</p>
+
+        <h3>Your Assigned Subjects</h3>
+
+        {% if subjects %}
+            {% for subject in subjects %}
+                <div class="subject">
+                    <strong>{{ subject.subject_code }}</strong>
+                    — {{ subject.subject_name }}
+
+                    <p>
+                        <a href="{% url 'create_attendance_session' subject.id %}">
+                            Create Attendance Session
+                        </a>
+                    </p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No subjects have been assigned to you yet.</p>
+        {% endif %}
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="logout-button">Log Out</button>
+        </form>
+    </main>
+</body>
+</html>

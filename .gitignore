@@ -1,0 +1,25 @@
+```gitignore
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Local database
+db.sqlite3
+
+# Environment variables and secrets
+.env
+
+# Test and coverage files
+.coverage
+htmlcov/
+
+# IDE and operating system files
+.vscode/
+.DS_Store
+Thumbs.db
+```

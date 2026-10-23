@@ -1,4 +1,3 @@
-```yaml
 name: Django Tests
 
 on:
@@ -28,4 +27,3 @@ jobs:
 
       - name: Run automated tests
         run: python manage.py test
-```

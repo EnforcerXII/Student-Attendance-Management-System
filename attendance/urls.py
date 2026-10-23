@@ -13,4 +13,10 @@ urlpatterns = [
         views.mark_attendance,
         name="mark_attendance",
     ),
+
+    path(
+        "report/<int:session_id>/",
+        views.attendance_report,
+        name="attendance_report",
+    ),
 ]

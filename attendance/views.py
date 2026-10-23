@@ -10,6 +10,7 @@ from django.db import transaction
 from django.http import HttpResponse
 from administration.models import Enrolment
 from .models import Attendance
+from django.db.models import Count, Q
 
 
 @login_required
@@ -127,3 +128,48 @@ def mark_attendance(request, session_id):
     }
 
     return render(request, "attendance/mark_attendance.html", context)
+
+
+@login_required
+def attendance_report(request, session_id):
+    if request.user.role != "FACULTY":
+        raise PermissionDenied
+
+    session = get_object_or_404(
+        AttendanceSession.objects.select_related("subject__faculty__user"),
+        id=session_id,
+        subject__faculty__user=request.user,
+    )
+
+    total_students = Enrolment.objects.filter(
+        subject=session.subject
+    ).count()
+
+    attendance_records = Attendance.objects.filter(session=session)
+
+    counts = attendance_records.aggregate(
+        present=Count("id", filter=Q(status="PRESENT")),
+        absent=Count("id", filter=Q(status="ABSENT")),
+        late=Count("id", filter=Q(status="LATE")),
+    )
+
+    present_count = counts["present"] or 0
+    absent_count = counts["absent"] or 0
+    late_count = counts["late"] or 0
+
+    attendance_percentage = (
+        round((present_count + late_count) / total_students * 100, 2)
+        if total_students > 0
+        else 0
+    )
+
+    context = {
+        "session": session,
+        "total_students": total_students,
+        "present_count": present_count,
+        "absent_count": absent_count,
+        "late_count": late_count,
+        "attendance_percentage": attendance_percentage,
+    }
+
+    return render(request, "attendance/attendance_report.html", context)

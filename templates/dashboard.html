@@ -3,81 +3,409 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAMS | Dashboard</title>
+    <title>{{ dashboard_title }} | SAMS</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            background-color: #f1f5f9;
+            background-color: #f4f7fb;
             margin: 0;
             padding: 0;
+            color: #263238;
         }
 
         header {
-            background-color: #1e3a8a;
+            background-color: #17365d;
             color: white;
-            padding: 20px 40px;
+            padding: 20px 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         header h1 {
             margin: 0;
+            font-size: 25px;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 30px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .welcome {
-            color: #1e3a8a;
-        }
-
-        .role {
-            display: inline-block;
-            background-color: #dbeafe;
-            color: #1e40af;
-            padding: 8px 15px;
-            border-radius: 20px;
+        .header-subtitle {
+            margin-top: 6px;
+            font-size: 14px;
+            color: #dce6f1;
         }
 
         .logout-button {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #dc2626;
-            color: white;
-            text-decoration: none;
+            background-color: #ffffff;
+            color: #17365d;
+            padding: 10px 18px;
             border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .logout-button:hover {
+            background-color: #e6edf5;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .welcome-card {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+
+        .welcome-card h2 {
+            margin-top: 0;
+            color: #17365d;
+        }
+
+        .section-title {
+            color: #17365d;
+            margin: 30px 0 18px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+        }
+
+        .stat-card {
+            background-color: white;
+            padding: 24px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #2874a6;
+        }
+
+        .stat-card h3 {
+            margin: 0 0 12px;
+            color: #526575;
+            font-size: 15px;
+        }
+
+        .stat-number {
+            font-size: 30px;
+            font-weight: bold;
+            color: #17365d;
+        }
+
+        .panel {
+            background-color: white;
+            padding: 24px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+            overflow-x: auto;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .summary-item {
+            background-color: #f4f7fb;
+            padding: 18px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .summary-item h3 {
+            font-size: 14px;
+            color: #526575;
+            margin: 0 0 10px;
+        }
+
+        .summary-item p {
+            font-size: 24px;
+            font-weight: bold;
+            color: #17365d;
+            margin: 0;
+        }
+
+        .percentage {
+            color: #16804a !important;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            min-width: 500px;
+        }
+
+        th, td {
+            padding: 13px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background-color: #17365d;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f4f7fb;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .present {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .absent {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .late {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .empty-message {
+            color: #687784;
+            padding: 15px 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #687784;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 18px;
+            }
+
+            header h1 {
+                font-size: 21px;
+            }
+
+            .container {
+                margin-top: 20px;
+                padding: 0 12px;
+            }
+
+            .panel, .welcome-card {
+                padding: 18px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <header>
-        <h1>SAMS</h1>
-        <p>Student Attendance Management System</p>
-    </header>
 
-    <main class="container">
-        <h2 class="welcome">{{ dashboard_title }}</h2>
+<header>
+    <div>
+        <h1>Student Attendance Management System</h1>
+        <div class="header-subtitle">SAMS | Dashboard</div>
+    </div>
 
-        <p>Welcome, {{ username }}!</p>
+    <a class="logout-button" href="{% url 'logout' %}">Logout</a>
+</header>
+
+<main class="container">
+
+    <section class="welcome-card">
+        <h2>{{ dashboard_title }}</h2>
+
+        <p>Welcome, <strong>{{ username }}</strong>!</p>
 
         <p>
-            Your role:
-            <span class="role">{{ user_role }}</span>
+            {% if user_role == "ADMIN" %}
+                Monitor students, faculty, subjects and attendance sessions.
+            {% elif user_role == "FACULTY" %}
+                View your dashboard and manage attendance for your subjects.
+            {% else %}
+                View your attendance summary and attendance history.
+            {% endif %}
         </p>
+    </section>
 
-        <p>You have successfully logged in to SAMS.</p>
+    {% if user_role == "ADMIN" %}
 
-        <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit" class="logout-button">Log Out</button>
-        </form>
-    </main>
+        <h2 class="section-title">System Overview</h2>
+
+        <section class="stats-grid">
+
+            <div class="stat-card">
+                <h3>Total Students</h3>
+                <div class="stat-number">{{ total_students }}</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>Total Faculty</h3>
+                <div class="stat-number">{{ total_faculty }}</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>Total Subjects</h3>
+                <div class="stat-number">{{ total_subjects }}</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>Attendance Sessions</h3>
+                <div class="stat-number">{{ total_sessions }}</div>
+            </div>
+
+        </section>
+
+        <section class="panel" style="margin-top: 25px;">
+            <h2>Administration</h2>
+            <p>
+                Use Django Admin to manage student accounts, faculty,
+                subjects, enrolments and other system records.
+            </p>
+            <a href="{% url 'admin:index' %}">Open Django Admin</a>
+        </section>
+
+    {% elif user_role == "STUDENT" %}
+
+        <h2 class="section-title">My Attendance Summary</h2>
+
+        <section class="panel">
+
+            <div class="summary-grid">
+
+                <div class="summary-item">
+                    <h3>Total Classes</h3>
+                    <p>{{ total_classes|default:0 }}</p>
+                </div>
+
+                <div class="summary-item">
+                    <h3>Present</h3>
+                    <p>{{ present_count|default:0 }}</p>
+                </div>
+
+                <div class="summary-item">
+                    <h3>Late</h3>
+                    <p>{{ late_count|default:0 }}</p>
+                </div>
+
+                <div class="summary-item">
+                    <h3>Attendance Percentage</h3>
+                    <p class="percentage">
+                        {{ attendance_percentage|default:0 }}%
+                    </p>
+                </div>
+
+            </div>
+
+            <p class="empty-message">
+                Late attendance is included in the attendance percentage.
+            </p>
+
+        </section>
+
+        <h2 class="section-title">My Attendance History</h2>
+
+        <section class="panel">
+
+            {% if attendance_records %}
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for record in attendance_records %}
+                            <tr>
+                                <td>
+                                    {{ record.session.subject.subject_code }}
+                                    -
+                                    {{ record.session.subject.subject_name }}
+                                </td>
+
+                                <td>
+                                    {{ record.session.session_date|date:"d M Y" }}
+                                </td>
+
+                                <td>
+                                    {% if record.status == "PRESENT" %}
+                                        <span class="status present">
+                                            Present
+                                        </span>
+                                    {% elif record.status == "ABSENT" %}
+                                        <span class="status absent">
+                                            Absent
+                                        </span>
+                                    {% elif record.status == "LATE" %}
+                                        <span class="status late">
+                                            Late
+                                        </span>
+                                    {% else %}
+                                        {{ record.status }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            {% else %}
+
+                <p class="empty-message">
+                    No attendance records are available yet.
+                </p>
+
+            {% endif %}
+
+        </section>
+
+    {% elif user_role == "FACULTY" %}
+
+        <section class="panel">
+            <h2>Faculty Dashboard</h2>
+            <p>
+                Open your faculty dashboard to view your assigned subjects
+                and manage attendance sessions.
+            </p>
+
+            <a href="{% url 'faculty_dashboard' %}">
+                Open Faculty Dashboard
+            </a>
+        </section>
+
+    {% endif %}
+
+</main>
+
+<footer>
+    Student Attendance Management System (SAMS)
+</footer>
+
 </body>
 </html>

@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Mark Attendance | SAMS</title>
+    <title>Mark Attendance - SAMS</title>
 
     <style>
         * {
@@ -13,9 +12,9 @@
 
         body {
             font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
             margin: 0;
             padding: 30px;
-            background-color: #f4f6f9;
             color: #333;
         }
 
@@ -25,92 +24,104 @@
         }
 
         h1 {
-            color: #243b55;
-            margin-bottom: 20px;
+            color: #243b64;
+            margin-bottom: 10px;
         }
 
-        .session-info {
+        .subtitle {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .message {
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .table-container {
             background-color: white;
             padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-        }
-
-        .session-info p {
-            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            background-color: white;
-            border-radius: 8px;
-            overflow: hidden;
         }
 
         th,
         td {
-            padding: 14px;
-            border: 1px solid #ddd;
+            padding: 15px;
             text-align: left;
+            border-bottom: 1px solid #e5e7eb;
         }
 
         th {
-            background-color: #243b55;
+            background-color: #243b64;
             color: white;
         }
 
-        tbody tr:nth-child(even) {
-            background-color: #f9fafb;
+        tbody tr:hover {
+            background-color: #f8fafc;
         }
 
         select {
-            width: 150px;
             padding: 9px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            min-width: 130px;
             background-color: white;
         }
 
-        button {
-            margin-top: 20px;
-            padding: 12px 22px;
-            background-color: #243b55;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 15px;
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 22px;
         }
 
-        button:hover {
-            background-color: #365777;
-        }
-
-        .message {
-            padding: 12px;
-            margin-bottom: 15px;
-            background-color: #e2f5e9;
-            color: #246b40;
-            border-radius: 5px;
-        }
-
-        .back-link {
+        .button {
             display: inline-block;
-            margin-top: 25px;
-            color: #243b55;
+            padding: 11px 18px;
+            border: none;
+            border-radius: 6px;
             text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
         }
 
-        .back-link:hover {
-            text-decoration: underline;
+        .save-button {
+            background-color: #16a34a;
+            color: white;
         }
 
-        .empty-message {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
+        .save-button:hover {
+            background-color: #15803d;
+        }
+
+        .report-button {
+            background-color: #243b64;
+            color: white;
+        }
+
+        .report-button:hover {
+            background-color: #172947;
+        }
+
+        .back-button {
+            background-color: #e5e7eb;
+            color: #333;
+        }
+
+        .back-button:hover {
+            background-color: #d1d5db;
         }
 
         @media (max-width: 600px) {
@@ -118,125 +129,113 @@
                 padding: 15px;
             }
 
-            table {
-                font-size: 13px;
-            }
-
             th,
             td {
-                padding: 8px;
-            }
-
-            select {
-                width: 115px;
+                padding: 10px;
             }
         }
     </style>
 </head>
 
 <body>
+    <div class="container">
 
-<div class="container">
+        <h1>Mark Attendance</h1>
 
-    <h1>Mark Student Attendance</h1>
-
-    <div class="session-info">
-        <p>
+        <p class="subtitle">
             <strong>Subject:</strong>
             {{ session.subject.subject_code }} -
             {{ session.subject.subject_name }}
+            <br>
+
+            <strong>Date:</strong>
+            {{ session.session_date|date:"d M Y" }}
         </p>
 
-        <p>
-            <strong>Attendance Date:</strong>
-            {{ session.session_date }}
-        </p>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
 
-        <p>
-            <strong>Faculty:</strong>
-            {{ request.user.get_full_name|default:request.user.username }}
-        </p>
-    </div>
+        <div class="table-container">
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="message">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
+            <form method="post">
+                {% csrf_token %}
 
-    {% if student_rows %}
-
-        <form method="post">
-
-            {% csrf_token %}
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Student ID</th>
-                        <th>Student Name</th>
-                        <th>Attendance Status</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for row in student_rows %}
+                <table>
+                    <thead>
                         <tr>
-
-                            <td>
-                                {{ row.student.student_id }}
-                            </td>
-
-                            <td>
-                                {{ row.student.user.get_full_name|default:row.student.user.username }}
-                            </td>
-
-                            <td>
-                                <select
-                                    name="status_{{ row.student.id }}"
-                                    required
-                                >
-                                    {% for status_value, status_label in statuses %}
-
-                                        <option
-                                            value="{{ status_value }}"
-                                            {% if row.current_status == status_value %}
-                                                selected
-                                            {% endif %}
-                                        >
-                                            {{ status_label }}
-                                        </option>
-
-                                    {% endfor %}
-                                </select>
-                            </td>
-
+                            <th>Student ID</th>
+                            <th>Student Name</th>
+                            <th>Attendance Status</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
 
-            <button type="submit">
-                Save Attendance
-            </button>
+                    <tbody>
+                        {% for row in student_rows %}
+                            <tr>
+                                <td>
+                                    {{ row.student.student_id }}
+                                </td>
 
-        </form>
+                                <td>
+                                    {{ row.student.user.get_full_name|default:row.student.user.username }}
+                                </td>
 
-    {% else %}
+                                <td>
+                                    <select name="status_{{ row.student.id }}" required>
+                                        {% for value, label in statuses %}
+                                            <option
+                                                value="{{ value }}"
+                                                {% if row.current_status == value %}selected{% endif %}
+                                            >
+                                                {{ label }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3">
+                                    No students are enrolled in this subject.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
 
-        <div class="empty-message">
-            <p>No students are enrolled in this subject.</p>
+                {% if student_rows %}
+                    <div class="buttons">
+                        <button type="submit" class="button save-button">
+                            Save Attendance
+                        </button>
+                    </div>
+                {% endif %}
+
+            </form>
+
+            <div class="buttons">
+                <a
+                    href="{% url 'attendance_report' session.id %}"
+                    class="button report-button"
+                >
+                    View Attendance Report
+                </a>
+
+                <a
+                    href="{% url 'faculty_dashboard' %}"
+                    class="button back-button"
+                >
+                    Back to Faculty Dashboard
+                </a>
+            </div>
+
         </div>
 
-    {% endif %}
-
-    <a class="back-link" href="{% url 'faculty_dashboard' %}">
-        &larr; Back to Faculty Dashboard
-    </a>
-
-</div>
-
+    </div>
 </body>
 </html>

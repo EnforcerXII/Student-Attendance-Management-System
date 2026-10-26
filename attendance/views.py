@@ -1,16 +1,15 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-
-from administration.models import Subject
-from .models import AttendanceSession
-
 from django.db import transaction
-from django.http import HttpResponse
-from administration.models import Enrolment
-from .models import Attendance
 from django.db.models import Count, Q
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
+
+from administration.models import Enrolment, Student, Subject
+
+from .models import Attendance, AttendanceSession
+from .services import student_overall_summary
 
 
 @login_required
@@ -173,3 +172,26 @@ def attendance_report(request, session_id):
     }
 
     return render(request, "attendance/attendance_report.html", context)
+
+
+@login_required
+def student_attendance(request):
+    if request.user.role != "STUDENT":
+        raise PermissionDenied
+
+    student = get_object_or_404(Student, user=request.user)
+
+    summaries = student_overall_summary(student)
+
+    history = (
+        Attendance.objects.filter(student=student)
+        .select_related("session__subject")
+        .order_by("-session__session_date")
+    )
+
+    context = {
+        "student": student,
+        "summaries": summaries,
+        "history": history,
+    }
+    return render(request, "attendance/student_attendance.html", context)

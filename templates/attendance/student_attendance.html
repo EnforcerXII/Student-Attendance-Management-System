@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Attendance</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 900px; margin: 20px auto; padding: 0 12px; }
+    .table-wrap { overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; margin-bottom: 24px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f2f2f2; }
+    .low { color: #b00020; font-weight: bold; }
+    .ok { color: #1b7f3b; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>My Attendance</h1>
+  <p>{{ student.student_id }} - {{ student.user.get_full_name|default:student.user.username }}</p>
+
+  <h2>Subject Summary</h2>
+  <div class="table-wrap">
+    <table>
+      <tr>
+        <th>Subject</th><th>Classes</th><th>Present</th>
+        <th>Late</th><th>Absent</th><th>Percentage</th><th>Status</th>
+      </tr>
+      {% for s in summaries %}
+      <tr>
+        <td>{{ s.subject }}</td>
+        <td>{{ s.total }}</td>
+        <td>{{ s.present }}</td>
+        <td>{{ s.late }}</td>
+        <td>{{ s.absent }}</td>
+        <td>{{ s.percentage }}%</td>
+        <td>
+          {% if s.is_low %}<span class="low">Low attendance</span>
+          {% else %}<span class="ok">OK</span>{% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="7">You are not enrolled in any subjects.</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <h2>Attendance History</h2>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Date</th><th>Subject</th><th>Status</th></tr>
+      {% for record in history %}
+      <tr>
+        <td>{{ record.session.session_date }}</td>
+        <td>{{ record.session.subject }}</td>
+        <td>{{ record.get_status_display }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="3">No attendance records yet.</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <p><a href="/">Back to dashboard</a></p>
+</body>
+</html>

@@ -13,6 +13,11 @@ urlpatterns = [
         name="mark_attendance",
     ),
     path(
+        "sessions/<int:session_id>/modify/",
+        views.modify_attendance,
+        name="modify_attendance",
+    ),
+    path(
         "report/<int:session_id>/",
         views.attendance_report,
         name="attendance_report",
@@ -21,5 +26,15 @@ urlpatterns = [
         "my/",
         views.student_attendance,
         name="student_attendance",
+    ),
+    path(
+        "subject/<int:subject_id>/defaulters/",
+        views.defaulters_list,
+        name="defaulters_list",
+    ),
+    path(
+        "reports/",
+        views.reports_dashboard,
+        name="attendance_reports",
     ),
 ]

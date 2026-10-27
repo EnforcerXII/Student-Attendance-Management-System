@@ -200,6 +200,42 @@
             font-size: 13px;
         }
 
+        .alert-banner {
+            background-color: #fee2e2;
+            border-left: 5px solid #dc2626;
+            color: #991b1b;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-size: 15px;
+        }
+
+        .alert-banner h3 {
+            margin: 0 0 8px;
+            color: #7f1d1d;
+            font-size: 17px;
+        }
+
+        .alert-banner ul {
+            margin: 5px 0 0;
+            padding-left: 20px;
+        }
+
+        .btn-link {
+            display: inline-block;
+            background-color: #17365d;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 12px;
+        }
+
+        .btn-link:hover {
+            background-color: #245288;
+        }
+
         @media (max-width: 600px) {
             header {
                 padding: 18px;
@@ -276,20 +312,52 @@
                 <div class="stat-number">{{ total_sessions }}</div>
             </div>
 
+            <div class="stat-card">
+                <h3>Attendance Records</h3>
+                <div class="stat-number">{{ total_records|default:0 }}</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>Audit Logs</h3>
+                <div class="stat-number">{{ total_audit_logs|default:0 }}</div>
+            </div>
+
         </section>
 
         <section class="panel" style="margin-top: 25px;">
-            <h2>Administration</h2>
+            <h2>Administration Tools</h2>
             <p>
-                Use Django Admin to manage student accounts, faculty,
-                subjects, enrolments and other system records.
+                Manage users, courses, enrolments, view overall attendance reports and inspect system activity logs.
             </p>
-            <a href="{% url 'admin:index' %}">Open Django Admin</a>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 15px;">
+                <a class="btn-link" href="{% url 'admin:index' %}">Open Django Admin</a>
+                <a class="btn-link" style="background-color: #0d9488;" href="{% url 'attendance_reports' %}">Attendance Reports</a>
+                <a class="btn-link" style="background-color: #6366f1;" href="{% url 'audit_logs' %}">View Audit Logs</a>
+            </div>
         </section>
 
     {% elif user_role == "STUDENT" %}
 
-        <h2 class="section-title">My Attendance Summary</h2>
+        {% if low_attendance_alerts %}
+            <div class="alert-banner">
+                <h3>⚠️ Low Attendance Alert</h3>
+                <p>Your attendance in the following subject(s) is below the minimum required <strong>{{ threshold }}%</strong> threshold:</p>
+                <ul>
+                    {% for item in low_attendance_alerts %}
+                        <li>
+                            <strong>{{ item.subject.subject_code }} - {{ item.subject.subject_name }}</strong>:
+                            {{ item.percentage }}% (Attended {{ item.present|add:item.late }} of {{ item.total }} classes)
+                        </li>
+                    {% endfor %}
+                </ul>
+                <p style="margin-top: 10px; font-size: 13px;">Please attend upcoming classes to avoid detention or eligibility issues.</p>
+            </div>
+        {% endif %}
+
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+            <h2 class="section-title">My Attendance Summary</h2>
+            <a class="btn-link" href="{% url 'student_attendance' %}">View Detailed History & Subjects &rarr;</a>
+        </div>
 
         <section class="panel">
 

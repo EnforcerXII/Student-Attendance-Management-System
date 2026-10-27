@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mark Attendance - SAMS</title>
+    <title>{% if is_modifying %}Modify Attendance{% else %}Mark Attendance{% endif %} | SAMS</title>
 
     <style>
         * {
@@ -44,10 +44,32 @@
 
         .table-container {
             background-color: white;
-            padding: 20px;
+            padding: 24px;
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             overflow-x: auto;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .quick-btn {
+            padding: 8px 14px;
+            font-size: 13px;
+            border-radius: 5px;
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            color: #1e293b;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .quick-btn:hover {
+            background: #e2e8f0;
         }
 
         table {
@@ -55,9 +77,8 @@
             border-collapse: collapse;
         }
 
-        th,
-        td {
-            padding: 15px;
+        th, td {
+            padding: 14px;
             text-align: left;
             border-bottom: 1px solid #e5e7eb;
         }
@@ -72,11 +93,36 @@
         }
 
         select {
-            padding: 9px;
-            border: 1px solid #ccc;
+            padding: 8px 12px;
+            border: 1px solid #cbd5e1;
             border-radius: 5px;
             min-width: 130px;
             background-color: white;
+            font-size: 14px;
+        }
+
+        .reason-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+        }
+
+        .reason-box label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #334155;
+            font-size: 14px;
+        }
+
+        .reason-box input {
+            width: 100%;
+            padding: 9px;
+            border: 1px solid #cbd5e1;
+            border-radius: 5px;
+            font-size: 14px;
         }
 
         .buttons {
@@ -93,6 +139,7 @@
             border-radius: 6px;
             text-decoration: none;
             font-size: 14px;
+            font-weight: bold;
             cursor: pointer;
             text-align: center;
         }
@@ -128,9 +175,7 @@
             body {
                 padding: 15px;
             }
-
-            th,
-            td {
+            th, td {
                 padding: 10px;
             }
         }
@@ -140,16 +185,14 @@
 <body>
     <div class="container">
 
-        <h1>Mark Attendance</h1>
+        <h1>{% if is_modifying %}Modify Attendance{% else %}Mark Attendance{% endif %}</h1>
 
         <p class="subtitle">
-            <strong>Subject:</strong>
-            {{ session.subject.subject_code }} -
-            {{ session.subject.subject_name }}
-            <br>
-
-            <strong>Date:</strong>
-            {{ session.session_date|date:"d M Y" }}
+            <strong>Subject:</strong> {{ session.subject.subject_code }} - {{ session.subject.subject_name }}<br>
+            <strong>Date:</strong> {{ session.session_date|date:"d M Y" }}
+            {% if is_modifying %}
+                <span style="display: inline-block; margin-left: 10px; color: #b45309; font-weight: bold; background: #fef3c7; padding: 2px 8px; border-radius: 4px; font-size: 12px;">Existing Record Loaded</span>
+            {% endif %}
         </p>
 
         {% if messages %}
@@ -162,7 +205,13 @@
 
         <div class="table-container">
 
-            <form method="post">
+            <div class="quick-actions">
+                <span style="font-size: 13px; font-weight: bold; align-self: center; color: #64748b;">Bulk Actions:</span>
+                <button type="button" class="quick-btn" onclick="setAllStatus('PRESENT')">✓ Mark All Present</button>
+                <button type="button" class="quick-btn" onclick="setAllStatus('ABSENT')">✗ Mark All Absent</button>
+            </div>
+
+            <form method="post" id="attendanceForm">
                 {% csrf_token %}
 
                 <table>
@@ -178,7 +227,7 @@
                         {% for row in student_rows %}
                             <tr>
                                 <td>
-                                    {{ row.student.student_id }}
+                                    <strong>{{ row.student.student_id }}</strong>
                                 </td>
 
                                 <td>
@@ -186,7 +235,7 @@
                                 </td>
 
                                 <td>
-                                    <select name="status_{{ row.student.id }}" required>
+                                    <select name="status_{{ row.student.id }}" class="status-select" required>
                                         {% for value, label in statuses %}
                                             <option
                                                 value="{{ value }}"
@@ -208,10 +257,17 @@
                     </tbody>
                 </table>
 
+                {% if is_modifying %}
+                    <div class="reason-box">
+                        <label for="id_reason">Modification Reason (logged for audit):</label>
+                        <input type="text" id="id_reason" name="reason" placeholder="e.g. Corrected mistaken absence, student arrived with excuse">
+                    </div>
+                {% endif %}
+
                 {% if student_rows %}
                     <div class="buttons">
                         <button type="submit" class="button save-button">
-                            Save Attendance
+                            {% if is_modifying %}Save Changes{% else %}Save Attendance{% endif %}
                         </button>
                     </div>
                 {% endif %}
@@ -223,7 +279,7 @@
                     href="{% url 'attendance_report' session.id %}"
                     class="button report-button"
                 >
-                    View Attendance Report
+                    View Session Report
                 </a>
 
                 <a
@@ -237,5 +293,12 @@
         </div>
 
     </div>
+
+    <script>
+        function setAllStatus(val) {
+            const selects = document.querySelectorAll('.status-select');
+            selects.forEach(s => s.value = val);
+        }
+    </script>
 </body>
 </html>

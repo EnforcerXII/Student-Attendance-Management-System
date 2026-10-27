@@ -67,3 +67,27 @@ class Attendance(models.Model):
 
     def __str__(self):
         return f"{self.student} - {self.session} - {self.status}"
+
+
+class AuditLog(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="audit_logs",
+    )
+    action = models.CharField(max_length=100)
+    entity = models.CharField(max_length=100)
+    entity_id = models.CharField(max_length=50, blank=True, null=True)
+    old_value = models.TextField(blank=True, null=True)
+    new_value = models.TextField(blank=True, null=True)
+    reason = models.TextField(blank=True, null=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-timestamp"]
+
+    def __str__(self):
+        user_str = self.user.username if self.user else "System"
+        return f"[{self.timestamp}] {user_str} - {self.action} on {self.entity} ({self.entity_id})"

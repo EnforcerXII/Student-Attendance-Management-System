@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Audit Logs | SAMS</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 30px;
+            color: #263238;
+        }
+        .container { max-width: 1100px; margin: 0 auto; }
+        h1 { color: #17365d; margin-bottom: 6px; }
+        .subtitle { color: #64748b; margin-bottom: 25px; }
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 24px;
+        }
+        .table-wrap { overflow-x: auto; }
+        table { border-collapse: collapse; width: 100%; min-width: 700px; }
+        th, td { border-bottom: 1px solid #e2e8f0; padding: 12px 14px; text-align: left; font-size: 14px; }
+        th { background: #17365d; color: white; }
+        tr:hover { background: #f8fafc; }
+        .badge-action {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .btn-back {
+            display: inline-block;
+            margin-top: 15px;
+            color: #17365d;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>System Audit Logs</h1>
+    <p class="subtitle">Activity trail of administrative and attendance operations (SAM-NF-006, SAM-SR-005).</p>
+
+    <div class="card">
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Timestamp (UTC)</th>
+                        <th>User</th>
+                        <th>Action</th>
+                        <th>Entity</th>
+                        <th>Entity ID</th>
+                        <th>Old Value</th>
+                        <th>New Value</th>
+                        <th>Reason / Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in logs %}
+                    <tr>
+                        <td>{{ log.timestamp|date:"Y-m-d H:i:s" }}</td>
+                        <td><strong>{{ log.user.username|default:"System" }}</strong></td>
+                        <td><span class="badge-action">{{ log.action }}</span></td>
+                        <td>{{ log.entity }}</td>
+                        <td>{{ log.entity_id|default:"-" }}</td>
+                        <td>{{ log.old_value|default:"-" }}</td>
+                        <td>{{ log.new_value|default:"-" }}</td>
+                        <td>{{ log.reason|default:"-" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 20px; color: #64748b;">
+                            No audit logs recorded yet.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <a href="{% url 'dashboard' %}" class="btn-back">&larr; Back to Admin Dashboard</a>
+</div>
+
+</body>
+</html>

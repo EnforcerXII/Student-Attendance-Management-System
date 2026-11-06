@@ -1,0 +1,27 @@
+[run]
+branch = True
+source = .
+omit =
+    */migrations/*
+    */tests.py
+    */tests_*.py
+    manage.py
+    config/wsgi.py
+    config/asgi.py
+    scripts/*
+    attendance/management/commands/seed_demo.py
+    venv/*
+    .venv/*
+
+[report]
+show_missing = True
+skip_covered = False
+
+[html]
+directory = docs/reports/coverage_html
+
+[xml]
+output = docs/reports/coverage.xml
+
+[json]
+output = docs/reports/coverage.json

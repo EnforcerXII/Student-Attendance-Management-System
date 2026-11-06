@@ -106,4 +106,3 @@ python scripts/performance_test.py
 - **Product Owner / Team Lead:** Atul Kandiyil (PES2UG24CS920)
 - **Dev Lead:** Riona Jeena Dsouza (PES2UG24CS654)
 - **Test Engineer:** Amit (PES2UG24CS624)
-- **QA Lead:** Shivakumar (PES2UG24CS548)

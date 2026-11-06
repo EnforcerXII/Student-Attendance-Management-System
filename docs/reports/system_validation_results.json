@@ -1,0 +1,170 @@
+[
+  {
+    "id": "SV-01",
+    "title": "Health endpoint reports healthy",
+    "requirements": "SAM-NF-002 / TC-REL-01",
+    "result": "PASS",
+    "evidence": "HTTP 200 {'status': 'healthy', 'database': 'connected'}"
+  },
+  {
+    "id": "SV-02",
+    "title": "Anonymous user redirected to login",
+    "requirements": "SAM-SR-001 / TC-SEC-01",
+    "result": "PASS",
+    "evidence": "HTTP 302 -> /accounts/login/?next=/dashboard/"
+  },
+  {
+    "id": "SV-03",
+    "title": "Invalid login rejected, no session",
+    "requirements": "SAM-F-002 / TC-AUTH-02",
+    "result": "PASS",
+    "evidence": "HTTP 200, session cookie issued: False"
+  },
+  {
+    "id": "SV-04",
+    "title": "Student logs in and lands on dashboard",
+    "requirements": "SAM-F-001 / TC-AUTH-01",
+    "result": "PASS",
+    "evidence": "final URL http://127.0.0.1:8765/dashboard/, HTTP 200"
+  },
+  {
+    "id": "SV-05",
+    "title": "Student sees own attendance with low-attendance alert (bob, 50%)",
+    "requirements": "SAM-F-017, F-018, F-023, F-024 / TC-VIEW-01, TC-CALC-01, TC-NOT-01, TC-HIST-01",
+    "result": "PASS",
+    "evidence": "HTTP 200, alert banner present: True"
+  },
+  {
+    "id": "SV-06",
+    "title": "Student with good attendance sees no alert (charlie, 100%)",
+    "requirements": "SAM-F-023 / TC-NOT-01",
+    "result": "PASS",
+    "evidence": "HTTP 200, banner absent"
+  },
+  {
+    "id": "SV-07",
+    "title": "Student blocked from faculty/admin pages (403)",
+    "requirements": "SAM-F-003, SAM-SR-002 / TC-AUTH-03, TC-SEC-02",
+    "result": "PASS",
+    "evidence": "{'/faculty/dashboard/': 403, '/attendance/reports/': 403, '/administration/audit-logs/': 403}"
+  },
+  {
+    "id": "SV-08",
+    "title": "Student cannot mark attendance by direct POST",
+    "requirements": "SAM-F-013 / TC-ATT-02",
+    "result": "PASS",
+    "evidence": "HTTP 403"
+  },
+  {
+    "id": "SV-09",
+    "title": "Faculty dashboard shows assigned subjects",
+    "requirements": "SAM-F-019 / TC-VIEW-02",
+    "result": "PASS",
+    "evidence": "HTTP 200"
+  },
+  {
+    "id": "SV-10",
+    "title": "Faculty creates a session; same date twice does not duplicate",
+    "requirements": "SAM-F-012, F-015 / TC-ATT-01, TC-ATT-04",
+    "result": "PASS",
+    "evidence": "1 session row(s) for 2026-11-20"
+  },
+  {
+    "id": "SV-11",
+    "title": "Faculty marks Present/Absent/Late for all enrolled students",
+    "requirements": "SAM-F-012, F-016 / TC-ATT-01, TC-ATT-05",
+    "result": "PASS",
+    "evidence": "HTTP 302, 3/3 records saved"
+  },
+  {
+    "id": "SV-12",
+    "title": "Re-submitting the same sheet creates no duplicates",
+    "requirements": "SAM-F-015 / TC-ATT-04",
+    "result": "PASS",
+    "evidence": "3 records after second submit"
+  },
+  {
+    "id": "SV-13",
+    "title": "Faculty modifies a record; old/new value and reason audited",
+    "requirements": "SAM-F-014, SAM-NF-006 / TC-ATT-03, TC-AUDIT-01",
+    "result": "PASS",
+    "evidence": "status now PRESENT, audit row ('ABSENT', 'PRESENT', 'System test correction')"
+  },
+  {
+    "id": "SV-14",
+    "title": "Defaulters list flags students below 75%",
+    "requirements": "SAM-F-020 / TC-CALC-02",
+    "result": "PASS",
+    "evidence": "HTTP 200, STU102 (bob) listed: True"
+  },
+  {
+    "id": "SV-15",
+    "title": "Report filters and CSV export work",
+    "requirements": "SAM-F-021, F-022 / TC-REP-01, TC-REP-02",
+    "result": "PASS",
+    "evidence": "HTTP 200, CSV rows (excl. header): 5"
+  },
+  {
+    "id": "SV-16",
+    "title": "Invalid attendance status rejected",
+    "requirements": "Input validation (STP 5.1) / TC-ATT",
+    "result": "PASS",
+    "evidence": "HTTP 400"
+  },
+  {
+    "id": "SV-17",
+    "title": "Admin dashboard shows system totals",
+    "requirements": "SAM-F-003 (admin role)",
+    "result": "PASS",
+    "evidence": "HTTP 200"
+  },
+  {
+    "id": "SV-18",
+    "title": "Admin can view audit log containing the correction",
+    "requirements": "SAM-NF-006, SAM-SR-005 / TC-AUDIT-01, TC-SEC-05",
+    "result": "PASS",
+    "evidence": "HTTP 200"
+  },
+  {
+    "id": "SV-19",
+    "title": "Admin portal manages students/faculty/subjects/enrolments",
+    "requirements": "SAM-F-005..F-011 / TC-STU, TC-FAC, TC-SUB, TC-ENR",
+    "result": "PASS",
+    "evidence": "HTTP 200"
+  },
+  {
+    "id": "SV-20",
+    "title": "Logout ends the session",
+    "requirements": "SAM-F-004 / TC-AUTH-04",
+    "result": "PASS",
+    "evidence": "logout HTTP 302; dashboard then HTTP 302"
+  },
+  {
+    "id": "SV-21",
+    "title": "Stored passwords are salted one-way hashes (runtime hasher)",
+    "requirements": "SAM-SR-003 / TC-SEC-03",
+    "result": "PASS",
+    "evidence": "5 users; scheme(s): ['pbkdf2_sha256']"
+  },
+  {
+    "id": "SV-22",
+    "title": "Session and CSRF cookies carry the Secure flag",
+    "requirements": "SAM-SR-004 / TC-SEC-04",
+    "result": "FAIL",
+    "evidence": "cookie Secure flags: {'csrftoken': False, 'sessionid': False, 'messages': False}  (see DEF-02)"
+  },
+  {
+    "id": "SV-23",
+    "title": "Rejected submission leaves no partial records",
+    "requirements": "SAM-NF-005 / TC-DATA-01",
+    "result": "FAIL",
+    "evidence": "HTTP 400, 1 record(s) left behind (see DEF-01)"
+  },
+  {
+    "id": "SV-24",
+    "title": "100 concurrent logged-in users view their attendance; p95 <= 3 s",
+    "requirements": "SAM-NF-001, SAM-NF-007 / TC-PERF-01, TC-SCALE-01",
+    "result": "PASS",
+    "evidence": "100 workers, errors=0, avg=0.220s p95=0.593s max=1.059s"
+  }
+]

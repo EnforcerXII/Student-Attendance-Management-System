@@ -7,7 +7,6 @@
 - Atul Kandiyil (PES2UG24CS920) - Team Lead / Product Owner  
 - Riona Jeena Dsouza (PES2UG24CS654) - Dev Lead  
 - Amit (PES2UG24CS624) - Test Engineer  
-- Shivakumar (PES2UG24CS548) - QA Lead  
 
 ---
 
@@ -121,4 +120,3 @@ Results:
 - **Product Owner:** Atul Kandiyil (PES2UG24CS920) - APPROVED
 - **Dev Lead:** Riona Jeena Dsouza (PES2UG24CS654) - APPROVED
 - **Test Engineer:** Amit (PES2UG24CS624) - APPROVED
-- **QA Lead:** Shivakumar (PES2UG24CS548) - APPROVED

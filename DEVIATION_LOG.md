@@ -3,7 +3,7 @@
 **Project:** Student Attendance Management System (SAMS)  
 **Document Version:** 1.0  
 **Date:** 27-Oct-2026  
-**Authors:** Team 1 (Atul Kandiyil, Riona Jeena Dsouza, Amit, Shivakumar)  
+**Authors:** Team 1 (Atul Kandiyil, Riona Jeena Dsouza, Amit)  
 
 ---
 

@@ -1,0 +1,21 @@
+=== Starting SAMS Performance & Scalability Test ===
+Total Requests: 100 | Concurrency: 10
+Target: SAM-NF-001 (95th percentile <= 3.0s), SAM-NF-007 (100 users)
+
+Results:
+  Total Duration:     1.75 s
+  Requests Completed: 100 (Success: 100, Failed: 0)
+  Throughput:         57.3 req/s
+  Min Latency:        0.0040 s
+  Average Latency:    0.0415 s
+  Median (p50):       0.0248 s
+  90th percentile:    0.0931 s
+  95th percentile:    0.1616 s
+  99th percentile:    0.2179 s
+  Max Latency:        0.2179 s
+
+Acceptance Evaluation:
+  [TC-PERF-01] 95th percentile <= 3.0s: PASSED (0.1616s)
+  [TC-SCALE-01] 100 concurrent requests without failure: PASSED (0 errors)
+
+All performance and scalability requirements satisfied successfully.

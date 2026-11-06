@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite name="accounts.tests_auth.DashboardTests-20261106101225" tests="6" file="accounts/tests_auth.py" time="0.068" timestamp="2026-11-06T10:12:26" failures="0" errors="0" skipped="0">
+		<testcase classname="accounts.tests_auth.DashboardTests" name="test_admin_dashboard_shows_totals" time="0.028" timestamp="2026-11-06T10:12:26" file="accounts/tests_auth.py" line="143"/>
+		<testcase classname="accounts.tests_auth.DashboardTests" name="test_faculty_dashboards_show_assigned_subjects_only" time="0.014" timestamp="2026-11-06T10:12:26" file="accounts/tests_auth.py" line="151"/>
+		<testcase classname="accounts.tests_auth.DashboardTests" name="test_student_dashboard_with_profile_and_records" time="0.009" timestamp="2026-11-06T10:12:26" file="accounts/tests_auth.py" line="162"/>
+		<testcase classname="accounts.tests_auth.DashboardTests" name="test_student_dashboard_without_attendance_records" time="0.009" timestamp="2026-11-06T10:12:26" file="accounts/tests_auth.py" line="172"/>
+		<testcase classname="accounts.tests_auth.DashboardTests" name="test_student_dashboard_without_student_profile" time="0.007" timestamp="2026-11-06T10:12:26" file="accounts/tests_auth.py" line="178">
+			<!--A STUDENT user with no Student profile still gets a safe dashboard.-->
+		</testcase>
+		<testcase classname="accounts.tests_auth.DashboardTests" name="test_user_str" time="0.002" timestamp="2026-11-06T10:12:26" file="accounts/tests_auth.py" line="186"/>
+	</testsuite>
+	<testsuite name="accounts.tests_auth.LoginLogoutTests-20261106101225" tests="7" file="accounts/tests_auth.py" time="0.051" timestamp="2026-11-06T10:12:26" failures="0" errors="0" skipped="0">
+		<testcase classname="accounts.tests_auth.LoginLogoutTests" name="test_tc_auth_01_login_page_renders" time="0.003" timestamp="2026-11-06T10:12:26" file="accounts/tests_auth.py" line="43"/>
+		<testcase classname="accounts.tests_auth.LoginLogoutTests" name="test_tc_auth_01_role_redirect_per_role" time="0.021" timestamp="2026-11-06T10:12:26" file="accounts/tests_auth.py" line="47">
+			<!--Each role lands on its own dashboard after login.-->
+		</testcase>
+		<testcase classname="accounts.tests_auth.LoginLogoutTests" name="test_tc_auth_01_valid_login_creates_session" time="0.004" timestamp="2026-11-06T10:12:26" file="accounts/tests_auth.py" line="37">
+			<!--TC-AUTH-01: Valid credentials log the user in (SAM-F-001).-->
+		</testcase>
+		<testcase classname="accounts.tests_auth.LoginLogoutTests" name="test_tc_auth_02_error_message_is_generic" time="0.005" timestamp="2026-11-06T10:12:26" file="accounts/tests_auth.py" line="68">
+			<!--Wrong password and unknown user give the same error (no account enumeration).-->
+		</testcase>
+		<testcase classname="accounts.tests_auth.LoginLogoutTests" name="test_tc_auth_02_invalid_password_rejected" time="0.003" timestamp="2026-11-06T10:12:26" file="accounts/tests_auth.py" line="56">
+			<!--TC-AUTH-02: Invalid credentials create no session and show an error (SAM-F-002).-->
+		</testcase>
+		<testcase classname="accounts.tests_auth.LoginLogoutTests" name="test_tc_auth_02_unknown_user_rejected" time="0.004" timestamp="2026-11-06T10:12:26" file="accounts/tests_auth.py" line="63"/>
+		<testcase classname="accounts.tests_auth.LoginLogoutTests" name="test_tc_auth_04_logout_ends_session" time="0.011" timestamp="2026-11-06T10:12:26" file="accounts/tests_auth.py" line="77">
+			<!--TC-AUTH-04: After logout protected pages need login again (SAM-F-004).-->
+		</testcase>
+	</testsuite>
+	<testsuite name="accounts.tests_auth.PasswordAndTransportSecurityTests-20261106101225" tests="3" file="accounts/tests_auth.py" time="0.764" timestamp="2026-11-06T10:12:26" failures="0" errors="0" skipped="1">
+		<testcase classname="accounts.tests_auth.PasswordAndTransportSecurityTests" name="test_tc_sec_03_password_is_hashed_not_plaintext" time="0.761" timestamp="2026-11-06T10:12:26" file="accounts/tests_auth.py" line="191">
+			<!--TC-SEC-03: Passwords are stored with a salted one-way hash (SAM-SR-003).-->
+		</testcase>
+		<testcase classname="accounts.tests_auth.PasswordAndTransportSecurityTests" name="test_tc_sec_04_proxy_ssl_header_configured" time="0.001" timestamp="2026-11-06T10:12:26" file="accounts/tests_auth.py" line="201">
+			<!--TC-SEC-04: Reverse-proxy HTTPS header is trusted (SAM-SR-004).-->
+		</testcase>
+		<testcase classname="accounts.tests_auth.PasswordAndTransportSecurityTests" name="test_tc_sec_04_secure_cookies_enabled" time="0.002" timestamp="2026-11-06T10:12:26" file="accounts/tests_auth.py" line="205">
+			<!--TC-SEC-04 (DEF-02): session/CSRF cookies should be Secure for HTTPS deployment.
+
+        Currently fails: settings.py hard-codes DEBUG = True, so the
+        `if not DEBUG:` block that sets SESSION_COOKIE_SECURE never runs.
+        Marked expectedFailure so the suite stays green while the defect is open.
+        -->
+			<skipped type="XFAIL" message="expected failure: (&lt;class 'AssertionError'&gt;, AssertionError('False is not true'), &lt;traceback object at 0x7f9dcf0efcc0&gt;)"/>
+		</testcase>
+	</testsuite>
+	<testsuite name="accounts.tests_auth.RoleBasedAccessTests-20261106101225" tests="5" file="accounts/tests_auth.py" time="0.045" timestamp="2026-11-06T10:12:26" failures="0" errors="0" skipped="0">
+		<testcase classname="accounts.tests_auth.RoleBasedAccessTests" name="test_tc_auth_03_admin_allowed_on_admin_pages" time="0.015" timestamp="2026-11-06T10:12:26" file="accounts/tests_auth.py" line="106"/>
+		<testcase classname="accounts.tests_auth.RoleBasedAccessTests" name="test_tc_auth_03_faculty_blocked_from_student_and_admin_pages" time="0.008" timestamp="2026-11-06T10:12:26" file="accounts/tests_auth.py" line="101"/>
+		<testcase classname="accounts.tests_auth.RoleBasedAccessTests" name="test_tc_auth_03_student_blocked_from_faculty_and_admin_pages" time="0.011" timestamp="2026-11-06T10:12:26" file="accounts/tests_auth.py" line="89">
+			<!--TC-AUTH-03 / TC-SEC-02: Student cannot reach faculty/admin functions (SAM-F-003, SAM-SR-002).-->
+		</testcase>
+		<testcase classname="accounts.tests_auth.RoleBasedAccessTests" name="test_tc_sec_01_unauthenticated_redirected_to_login" time="0.005" timestamp="2026-11-06T10:12:26" file="accounts/tests_auth.py" line="112">
+			<!--TC-SEC-01: Protected pages redirect anonymous users to login (SAM-SR-001).-->
+		</testcase>
+		<testcase classname="accounts.tests_auth.RoleBasedAccessTests" name="test_tc_sec_02_student_cannot_post_attendance_directly" time="0.006" timestamp="2026-11-06T10:12:26" file="accounts/tests_auth.py" line="129">
+			<!--TC-SEC-02: Authorisation is enforced on the server, not just hidden in the UI.-->
+		</testcase>
+	</testsuite>
+	<testsuite name="administration.tests.EnrolmentConstraintTest-20261106101225" tests="1" file="administration/tests.py" time="0.002" timestamp="2026-11-06T10:12:26" failures="0" errors="0" skipped="0">
+		<testcase classname="administration.tests.EnrolmentConstraintTest" name="test_duplicate_student_subject_enrolment_is_rejected" time="0.002" timestamp="2026-11-06T10:12:26" file="administration/tests.py" line="33"/>
+	</testsuite>
+	<testsuite name="administration.tests.StudentModelTest-20261106101225" tests="1" file="administration/tests.py" time="0.001" timestamp="2026-11-06T10:12:26" failures="0" errors="0" skipped="0">
+		<testcase classname="administration.tests.StudentModelTest" name="test_student_creation" time="0.001" timestamp="2026-11-06T10:12:26" file="administration/tests.py" line="12"/>
+	</testsuite>
+	<testsuite name="administration.tests_admin.AdminManagementTests-20261106101225" tests="10" file="administration/tests_admin.py" time="0.106" timestamp="2026-11-06T10:12:27" failures="0" errors="0" skipped="0">
+		<testcase classname="administration.tests_admin.AdminManagementTests" name="test_audit_log_view_lists_events_for_admin" time="0.007" timestamp="2026-11-06T10:12:26" file="administration/tests_admin.py" line="110"/>
+		<testcase classname="administration.tests_admin.AdminManagementTests" name="test_model_string_representations" time="0.005" timestamp="2026-11-06T10:12:26" file="administration/tests_admin.py" line="101"/>
+		<testcase classname="administration.tests_admin.AdminManagementTests" name="test_tc_enr_01_enrolled_student_appears_in_marking_list" time="0.015" timestamp="2026-11-06T10:12:26" file="administration/tests_admin.py" line="87">
+			<!--TC-ENR-01: Enrolled students appear in the faculty attendance list (SAM-F-011).-->
+		</testcase>
+		<testcase classname="administration.tests_admin.AdminManagementTests" name="test_tc_fac_01_admin_creates_faculty_who_can_login" time="0.010" timestamp="2026-11-06T10:12:26" file="administration/tests_admin.py" line="66">
+			<!--TC-FAC-01: A created faculty account can log in (SAM-F-008).-->
+		</testcase>
+		<testcase classname="administration.tests_admin.AdminManagementTests" name="test_tc_fac_02_assigned_faculty_sees_subject" time="0.012" timestamp="2026-11-06T10:12:26" file="administration/tests_admin.py" line="79">
+			<!--TC-FAC-02: Assigned faculty sees the subject on their dashboard (SAM-F-010).-->
+		</testcase>
+		<testcase classname="administration.tests_admin.AdminManagementTests" name="test_tc_stu_01_admin_adds_student" time="0.010" timestamp="2026-11-06T10:12:26" file="administration/tests_admin.py" line="29">
+			<!--TC-STU-01: Admin adds a student through the admin portal (SAM-F-005).-->
+		</testcase>
+		<testcase classname="administration.tests_admin.AdminManagementTests" name="test_tc_stu_01_duplicate_student_id_rejected" time="0.006" timestamp="2026-11-06T10:12:26" file="administration/tests_admin.py" line="39"/>
+		<testcase classname="administration.tests_admin.AdminManagementTests" name="test_tc_stu_02_admin_updates_student" time="0.011" timestamp="2026-11-06T10:12:26" file="administration/tests_admin.py" line="46">
+			<!--TC-STU-02: Updated student information is saved (SAM-F-006).-->
+		</testcase>
+		<testcase classname="administration.tests_admin.AdminManagementTests" name="test_tc_stu_03_admin_lists_students" time="0.026" timestamp="2026-11-06T10:12:27" file="administration/tests_admin.py" line="57">
+			<!--TC-STU-03: Admin can view the student list (SAM-F-007).-->
+		</testcase>
+		<testcase classname="administration.tests_admin.AdminManagementTests" name="test_tc_sub_01_subject_created_and_code_unique" time="0.004" timestamp="2026-11-06T10:12:27" file="administration/tests_admin.py" line="72">
+			<!--TC-SUB-01: Subject stored; subject codes are unique (SAM-F-009).-->
+		</testcase>
+	</testsuite>
+	<testsuite name="attendance.tests.AttendanceModelTest-20261106101225" tests="2" file="attendance/tests.py" time="0.004" timestamp="2026-11-06T10:12:27" failures="0" errors="0" skipped="0">
+		<testcase classname="attendance.tests.AttendanceModelTest" name="test_attendance_creation" time="0.002" timestamp="2026-11-06T10:12:27" file="attendance/tests.py" line="15"/>
+		<testcase classname="attendance.tests.AttendanceModelTest" name="test_duplicate_attendance_is_rejected" time="0.002" timestamp="2026-11-06T10:12:27" file="attendance/tests.py" line="69"/>
+	</testsuite>
+	<testsuite name="attendance.tests.AttendanceWorkflowTests-20261106101225" tests="3" file="attendance/tests.py" time="0.030" timestamp="2026-11-06T10:12:27" failures="0" errors="0" skipped="0">
+		<testcase classname="attendance.tests.AttendanceWorkflowTests" name="test_faculty_can_open_attendance_page" time="0.008" timestamp="2026-11-06T10:12:27" file="attendance/tests.py" line="192"/>
+		<testcase classname="attendance.tests.AttendanceWorkflowTests" name="test_faculty_can_save_attendance" time="0.013" timestamp="2026-11-06T10:12:27" file="attendance/tests.py" line="207"/>
+		<testcase classname="attendance.tests.AttendanceWorkflowTests" name="test_student_cannot_mark_attendance" time="0.010" timestamp="2026-11-06T10:12:27" file="attendance/tests.py" line="230"/>
+	</testsuite>
+	<testsuite name="attendance.tests.Sprint2Tests-20261106101225" tests="13" file="attendance/tests.py" time="0.172" timestamp="2026-11-06T10:12:27" failures="0" errors="0" skipped="0">
+		<testcase classname="attendance.tests.Sprint2Tests" name="test_tc_att_03_modify_attendance_permitted" time="0.015" timestamp="2026-11-06T10:12:27" file="attendance/tests.py" line="348">
+			<!--TC-ATT-03: Permitted edit updates record and writes to AuditLog (SAM-F-014).-->
+		</testcase>
+		<testcase classname="attendance.tests.Sprint2Tests" name="test_tc_att_03_modify_attendance_unauthorized_blocked" time="0.014" timestamp="2026-11-06T10:12:27" file="attendance/tests.py" line="378">
+			<!--TC-ATT-03: Non-assigned faculty or student cannot modify attendance.-->
+		</testcase>
+		<testcase classname="attendance.tests.Sprint2Tests" name="test_tc_audit_01_and_sec_05_audit_logging" time="0.021" timestamp="2026-11-06T10:12:27" file="attendance/tests.py" line="520">
+			<!--TC-AUDIT-01 & TC-SEC-05: Actions are logged and inspectable by Admin (SAM-NF-006, SAM-SR-005).-->
+		</testcase>
+		<testcase classname="attendance.tests.Sprint2Tests" name="test_tc_calc_01_attendance_percentage_calculation" time="0.004" timestamp="2026-11-06T10:12:27" file="attendance/tests.py" line="434">
+			<!--TC-CALC-01: Attendance percentage calculation is accurate (SAM-F-018).-->
+		</testcase>
+		<testcase classname="attendance.tests.Sprint2Tests" name="test_tc_calc_02_low_attendance_identification" time="0.013" timestamp="2026-11-06T10:12:27" file="attendance/tests.py" line="454">
+			<!--TC-CALC-02: Students below configured threshold are flagged (SAM-F-020).-->
+		</testcase>
+		<testcase classname="attendance.tests.Sprint2Tests" name="test_tc_hist_01_student_attendance_history" time="0.012" timestamp="2026-11-06T10:12:27" file="attendance/tests.py" line="416">
+			<!--TC-HIST-01: Past attendance records are maintained and viewable (SAM-F-024).-->
+		</testcase>
+		<testcase classname="attendance.tests.Sprint2Tests" name="test_tc_not_01_low_attendance_notification" time="0.023" timestamp="2026-11-06T10:12:27" file="attendance/tests.py" line="501">
+			<!--TC-NOT-01: Student receives alert when attendance < threshold (SAM-F-023).-->
+		</testcase>
+		<testcase classname="attendance.tests.Sprint2Tests" name="test_tc_perf_01_response_time" time="0.012" timestamp="2026-11-06T10:12:27" file="attendance/tests.py" line="555">
+			<!--TC-PERF-01: Key attendance endpoints respond well within 3 seconds (SAM-NF-001).-->
+		</testcase>
+		<testcase classname="attendance.tests.Sprint2Tests" name="test_tc_rel_01_health_check_endpoint" time="0.003" timestamp="2026-11-06T10:12:27" file="attendance/tests.py" line="547">
+			<!--TC-REL-01: Health check endpoint confirms system availability (SAM-NF-002).-->
+		</testcase>
+		<testcase classname="attendance.tests.Sprint2Tests" name="test_tc_rep_01_attendance_report_criteria" time="0.017" timestamp="2026-11-06T10:12:27" file="attendance/tests.py" line="470">
+			<!--TC-REP-01: Attendance reports filtered by criteria (SAM-F-021).-->
+		</testcase>
+		<testcase classname="attendance.tests.Sprint2Tests" name="test_tc_rep_02_attendance_summaries_and_csv_export" time="0.009" timestamp="2026-11-06T10:12:27" file="attendance/tests.py" line="487">
+			<!--TC-REP-02: Attendance summary statistics and CSV export (SAM-F-022).-->
+		</testcase>
+		<testcase classname="attendance.tests.Sprint2Tests" name="test_tc_view_01_student_view_own_attendance_only" time="0.016" timestamp="2026-11-06T10:12:27" file="attendance/tests.py" line="390">
+			<!--TC-VIEW-01: Student views only their own attendance data (SAM-F-017).-->
+		</testcase>
+		<testcase classname="attendance.tests.Sprint2Tests" name="test_tc_view_02_faculty_view_assigned_classes_only" time="0.012" timestamp="2026-11-06T10:12:27" file="attendance/tests.py" line="406">
+			<!--TC-VIEW-02: Faculty sees attendance records only for assigned classes (SAM-F-019).-->
+		</testcase>
+	</testsuite>
+	<testsuite name="attendance.tests_regression.HealthCheckFailureTests-20261106101225" tests="1" file="attendance/tests_regression.py" time="0.001" timestamp="2026-11-06T10:12:27" failures="0" errors="0" skipped="0">
+		<testcase classname="attendance.tests_regression.HealthCheckFailureTests" name="test_tc_rel_01_health_reports_503_when_database_down" time="0.001" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="315">
+			<!--TC-REL-01: Health endpoint reports 'unhealthy' (503) if the database is unreachable (SAM-NF-002).-->
+		</testcase>
+	</testsuite>
+	<testsuite name="attendance.tests_regression.MarkingTests-20261106101225" tests="11" file="attendance/tests_regression.py" time="0.127" timestamp="2026-11-06T10:12:27" failures="0" errors="0" skipped="1">
+		<testcase classname="attendance.tests_regression.MarkingTests" name="test_invalid_status_rejected_with_400" time="0.010" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="142">
+			<!--Server-side validation of attendance input (SAM-SR input validation).-->
+		</testcase>
+		<testcase classname="attendance.tests_regression.MarkingTests" name="test_modification_without_reason_uses_default" time="0.015" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="129"/>
+		<testcase classname="attendance.tests_regression.MarkingTests" name="test_modify_view_shows_existing_values" time="0.014" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="135"/>
+		<testcase classname="attendance.tests_regression.MarkingTests" name="test_other_faculty_cannot_mark_or_modify" time="0.010" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="181"/>
+		<testcase classname="attendance.tests_regression.MarkingTests" name="test_tc_att_01_mark_all_statuses" time="0.012" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="93">
+			<!--TC-ATT-01/05: Present/Absent/Late saved with student, session, status, time (SAM-F-012, F-016).-->
+		</testcase>
+		<testcase classname="attendance.tests_regression.MarkingTests" name="test_tc_att_03_modification_records_old_new_and_reason" time="0.016" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="121">
+			<!--TC-ATT-03: Changing a status keeps old/new values and the reason in the audit log.-->
+		</testcase>
+		<testcase classname="attendance.tests_regression.MarkingTests" name="test_tc_att_04_resubmission_does_not_duplicate" time="0.014" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="108">
+			<!--TC-ATT-04: Submitting twice for the same session never duplicates (SAM-F-015).-->
+		</testcase>
+		<testcase classname="attendance.tests_regression.MarkingTests" name="test_tc_data_01_database_blocks_duplicates" time="0.003" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="166">
+			<!--TC-DATA-01: DB-level unique constraint stops duplicate rows (SAM-NF-005).-->
+		</testcase>
+		<testcase classname="attendance.tests_regression.MarkingTests" name="test_tc_ux_01_bulk_marking_buttons_present" time="0.009" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="174">
+			<!--TC-UX-01: Mark-all shortcuts exist on the marking page (SAM-NF-004).-->
+		</testcase>
+		<testcase classname="attendance.tests_regression.MarkingTests" name="test_unchanged_resubmission_writes_no_modification_audit" time="0.014" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="115"/>
+		<testcase classname="attendance.tests_regression.MarkingTests" name="test_tc_data_01_partial_submission_is_rolled_back" time="0.010" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="149">
+			<!--TC-DATA-01 (DEF-01): A rejected submission must not leave partial records.
+
+        Currently fails: mark_attendance() returns the 400 response from inside
+        `transaction.atomic()` without raising, so records saved for earlier
+        students in the same request are committed. Marked expectedFailure
+        so the suite stays green while the defect is open.
+        -->
+			<skipped type="XFAIL" message="expected failure: (&lt;class 'AssertionError'&gt;, AssertionError('1 != 0'), &lt;traceback object at 0x7f9dcf070800&gt;)"/>
+		</testcase>
+	</testsuite>
+	<testsuite name="attendance.tests_regression.ModelAndServiceTests-20261106101225" tests="2" file="attendance/tests_regression.py" time="0.006" timestamp="2026-11-06T10:12:27" failures="0" errors="0" skipped="0">
+		<testcase classname="attendance.tests_regression.ModelAndServiceTests" name="test_attendance_and_session_str" time="0.003" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="308"/>
+		<testcase classname="attendance.tests_regression.ModelAndServiceTests" name="test_audit_log_anonymous_actor_and_strings" time="0.003" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="299"/>
+	</testsuite>
+	<testsuite name="attendance.tests_regression.ReportViewTests-20261106101225" tests="13" file="attendance/tests_regression.py" time="0.203" timestamp="2026-11-06T10:12:27" failures="0" errors="0" skipped="0">
+		<testcase classname="attendance.tests_regression.ReportViewTests" name="test_admin_sees_all_subjects_in_reports" time="0.011" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="228"/>
+		<testcase classname="attendance.tests_regression.ReportViewTests" name="test_defaulters_access_rules" time="0.020" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="276"/>
+		<testcase classname="attendance.tests_regression.ReportViewTests" name="test_defaulters_view_threshold_param" time="0.024" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="268"/>
+		<testcase classname="attendance.tests_regression.ReportViewTests" name="test_faculty_cannot_see_student_page" time="0.008" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="293"/>
+		<testcase classname="attendance.tests_regression.ReportViewTests" name="test_faculty_report_excludes_other_faculty_subjects" time="0.012" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="224"/>
+		<testcase classname="attendance.tests_regression.ReportViewTests" name="test_session_report_denied_for_other_faculty_and_student" time="0.019" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="206"/>
+		<testcase classname="attendance.tests_regression.ReportViewTests" name="test_session_report_for_faculty_and_admin" time="0.025" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="196"/>
+		<testcase classname="attendance.tests_regression.ReportViewTests" name="test_student_attendance_page_and_missing_profile" time="0.022" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="283"/>
+		<testcase classname="attendance.tests_regression.ReportViewTests" name="test_student_with_no_records_is_not_flagged" time="0.006" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="264"/>
+		<testcase classname="attendance.tests_regression.ReportViewTests" name="test_tc_calc_01_percentage_values" time="0.004" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="245">
+			<!--TC-CALC-01: (Present+Late)/Total*100, rounded to 2 dp (SAM-F-018).-->
+		</testcase>
+		<testcase classname="attendance.tests_regression.ReportViewTests" name="test_tc_calc_02_threshold_boundary" time="0.008" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="254">
+			<!--TC-CALC-02: 'Below 75%' is strict; exactly 75% is not flagged (SAM-F-020).-->
+		</testcase>
+		<testcase classname="attendance.tests_regression.ReportViewTests" name="test_tc_rep_01_filters_subject_student_and_dates" time="0.031" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="213">
+			<!--TC-REP-01: Report honours subject, student and date-range filters (SAM-F-021).-->
+		</testcase>
+		<testcase classname="attendance.tests_regression.ReportViewTests" name="test_tc_rep_02_summary_numbers_and_csv_match" time="0.012" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="233">
+			<!--TC-REP-02: On-screen totals equal the CSV export rows (SAM-F-022).-->
+		</testcase>
+	</testsuite>
+	<testsuite name="attendance.tests_regression.SessionCreationTests-20261106101225" tests="5" file="attendance/tests_regression.py" time="0.043" timestamp="2026-11-06T10:12:27" failures="0" errors="0" skipped="0">
+		<testcase classname="attendance.tests_regression.SessionCreationTests" name="test_create_session_and_audit" time="0.010" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="59">
+			<!--Faculty opens a class session; the action is audited (SAM-F-012, NF-006).-->
+		</testcase>
+		<testcase classname="attendance.tests_regression.SessionCreationTests" name="test_duplicate_session_not_created" time="0.008" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="68"/>
+		<testcase classname="attendance.tests_regression.SessionCreationTests" name="test_missing_date_rejected" time="0.009" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="73"/>
+		<testcase classname="attendance.tests_regression.SessionCreationTests" name="test_other_faculty_cannot_open_session_for_subject" time="0.008" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="86"/>
+		<testcase classname="attendance.tests_regression.SessionCreationTests" name="test_session_page_lists_sessions" time="0.008" timestamp="2026-11-06T10:12:27" file="attendance/tests_regression.py" line="80"/>
+	</testsuite>
+</testsuites>
